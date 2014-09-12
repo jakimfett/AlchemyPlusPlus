@@ -26,17 +26,14 @@ public class DistilleryBlock extends BlockComplex
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int meta, float b, float c, float g)
     {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
-        if (tileEntity != null && !player.isSneaking())
+        if (tileEntity != null)
         {
             if (!world.isRemote)
             {
-                System.out.println("Got to the block activation call");
                 player.openGui(AlchemyPlusPlus.INSTANCE, 2, world, x, y, z);
-                
             }
             return true;
         }
-
         return false;
     }
 

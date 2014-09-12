@@ -14,34 +14,31 @@ import alchemyplusplus.block.complex.fluidMixer.FluidMixerTileEntity;
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-
 import java.util.HashMap;
+import net.minecraft.tileentity.TileEntity;
 
 public class GUIHandler implements IGuiHandler
 {
-
     public static HashMap<String, Integer> guiHandlerRegistry = new HashMap<String, Integer>();
 
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
-        System.out.println("Got to the client GUI element method");
+        TileEntity entity = world.getTileEntity(x, y, z);
+
         switch (ID)
         {
             case 0:
             { // Potion mixer
-                FluidMixerTileEntity entity = (FluidMixerTileEntity) world.getTileEntity(x, y, z);
-                return new FluidMixerGUI(player.inventory, entity);
+                return new FluidMixerGUI(player.inventory, (FluidMixerTileEntity) entity);
             }
             case 1:
             { // Extractor
-                ExtractorTileEntity entity = (ExtractorTileEntity) world.getTileEntity(x, y, z);
-                return new ExtractorGUI(player.inventory, entity);
+                return new ExtractorGUI(player.inventory, (ExtractorTileEntity) entity);
             }
             case 2:
             { // Distillery
-                DistilleryTileEntity entity = (DistilleryTileEntity) world.getTileEntity(x, y, z);
-                return new DistilleryGUI(player.inventory, entity);
+                return new DistilleryGUI(player.inventory, (DistilleryTileEntity) entity);
             }
             default:
                 return null;
@@ -51,35 +48,28 @@ public class GUIHandler implements IGuiHandler
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
-        System.out.println("Got to the server GUI element method");
-
+        TileEntity entity = world.getTileEntity(x, y, z);
+        
         switch (ID)
         {
             case 0:
-            { // Fluid mixer
-                FluidMixerTileEntity entity = (FluidMixerTileEntity) world.getTileEntity(x, y, z);
-                return new FluidMixerContainer(player.inventory, entity);
+            { // Potion mixer
+                return new FluidMixerContainer(player.inventory, (FluidMixerTileEntity) entity);
             }
             case 1:
             { // Extractor
-                ExtractorTileEntity entity = (ExtractorTileEntity) world.getTileEntity(x, y, z);
-                return new ExtractorContainer(player.inventory, entity);
+                return new ExtractorContainer(player.inventory, (ExtractorTileEntity) entity);
             }
             case 2:
             { // Distillery
-                DistilleryTileEntity entity = (DistilleryTileEntity) world.getTileEntity(x, y, z);
-                return new DistilleryContainer(player.inventory, entity);
+                return new DistilleryContainer(player.inventory, (DistilleryTileEntity) entity);
             }
             case 3:
             { // Diffuser
-                DiffuserTileEntity entity = (DiffuserTileEntity) world.getTileEntity(x, y, z);
-                return new DiffuserContainer(player.inventory, entity);
+                return new DiffuserContainer(player.inventory, (DiffuserTileEntity) entity);
             }
-
             default:
                 return null;
-
         }
     }
-
 }
