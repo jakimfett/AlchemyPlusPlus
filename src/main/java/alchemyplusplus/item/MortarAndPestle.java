@@ -11,6 +11,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.StatCollector;
@@ -21,7 +22,6 @@ public class MortarAndPestle extends ItemBasic
 
     private IIcon[] icons;
     private IIcon filledIcon;
-    public boolean isFilled = false;
 
     public MortarAndPestle(String itemname)
     {
@@ -80,31 +80,33 @@ public class MortarAndPestle extends ItemBasic
 
     public void setFilled(boolean state, ItemStack stack)
     {
+        if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
         stack.getTagCompound().setBoolean("Filled", state);
     }
 
     public boolean getFilled(ItemStack stack)
     {
+        if (!stack.hasTagCompound()) return false;
         return stack.getTagCompound().getBoolean("Filled");
     }
 
-    public final void toggleFilled()
+    public final void toggleFilled(ItemStack stack)
     {
-        this.isFilled = !this.isFilled;
+        setFilled(!getFilled(stack), stack);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamageForRenderPass(int damage, int pass)
+    public IIcon getIcon(ItemStack stack, int pass)
     {
         if (pass == 1)
         {
-            if (this.isFilled)
+            if (getFilled(stack))
             {
                 return this.filledIcon;
             }
         }
-        return icons[damage];
+        return icons[stack.getItemDamage()];
     }
 
     @Override
